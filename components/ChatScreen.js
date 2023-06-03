@@ -10,6 +10,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot'
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome'
 import { GiftedChat } from 'react-native-gifted-chat'
+import {
+  renderBubble,
+  renderCustomView,
+  renderMessage,
+  renderMessageText,
+  renderSystemMessage
+} from './MessageContainer'
 
 const ChatScreen = ({ route }) => {
   const { username } = route.params
@@ -20,6 +27,12 @@ const ChatScreen = ({ route }) => {
       text: 'This is a system message',
       createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
       system: true
+    },
+    {
+      _id: 2,
+      text: 'Hello',
+      createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+      user: false
     }
   ]
   const [messages, setMessages] = React.useState([])
@@ -59,6 +72,10 @@ const ChatScreen = ({ route }) => {
             user={{
               _id: username
             }}
+            // renderBubble={renderBubble}
+            // renderSystemMessage={renderSystemMessage}
+            // renderMessage={renderMessage}
+            // renderMessageText={renderMessageText}
           />
         </KeyboardAvoidingView>
       </View>

@@ -10,7 +10,7 @@ const HomeScreen = ({ navigation }) => {
       //Check if user_id is set or not
       //If not then send for Authentication
       //else send to Home Screen
-      navigation.navigate('Login')
+      navigation.navigate('ChatScreen', { username: 'user' })
     }, 2000)
   }, [])
 
@@ -18,7 +18,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.mainBody}>
       <Image
         source={require('../assets/bot-animation.gif')}
-        style={{ width: '90%', resizeMode: 'contain', margin: 30 }}
+        style={{ width: '100%', resizeMode: 'contain', marginLeft: 'auto' }}
       />
       <ActivityIndicator
         animating={animating}
