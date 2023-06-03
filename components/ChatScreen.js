@@ -3,7 +3,7 @@ import { StyleSheet, View, KeyboardAvoidingView, Text } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot'
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome'
-import { GiftedChat } from 'react-native-gifted-chat'
+import { Composer, GiftedChat, InputToolbar } from 'react-native-gifted-chat'
 
 const ChatScreen = ({ route }) => {
   const { username } = route.params
@@ -37,26 +37,29 @@ const ChatScreen = ({ route }) => {
       _id: generateId(1),
       text: "What's your name ?",
       createdAt: new Date(),
-      system: false
-      //   user: { _id: 'user' }
+      system: false,
+      user: { _id: 'user', avatar: 'https://icon-library.com/images/user-icon-png/user-icon-png-16.jpg' }
     },
     {
       _id: generateId(2),
       text: "What's your age ?",
       createdAt: new Date(),
-      system: false
+      system: false,
+      user: { _id: 'user', avatar: 'https://icon-library.com/images/user-icon-png/user-icon-png-16.jpg' }
     },
     {
       _id: generateId(3),
       text: "What's your mood today ?",
       createdAt: new Date(),
-      system: false
+      system: false,
+      user: { _id: 'user', avatar: 'https://icon-library.com/images/user-icon-png/user-icon-png-16.jpg' }
     },
     {
       _id: generateId(4),
       text: 'What do you want to talk about ?',
       createdAt: new Date(),
-      system: false
+      system: false,
+      user: { _id: 'user', avatar: 'https://icon-library.com/images/user-icon-png/user-icon-png-16.jpg' }
     }
   ]
 
@@ -85,19 +88,16 @@ const ChatScreen = ({ route }) => {
             _id: prevMessages.length,
             text: replyMessage,
             createdAt: new Date(),
-            system: false
+            system: false,
+            user: { _id: 'user', avatar: 'https://icon-library.com/images/user-icon-png/user-icon-png-16.jpg' }
           }
         ])
       )
     }
   }
   const onSend = (newMessages = []) => {
-    // console.log(messages)
     if (messages.length < 9) {
-      console.log('start 1', messages.length)
       if (messages.length === 5) {
-        console.log('start 101', messages.length)
-        console.log('start 101', newMessages[0].text)
         const ageNumber = parseInt(newMessages[0].text)
         if (ageNumber > 0 && ageNumber < 18) {
           setAGE(ENUM.age_category.young)
@@ -110,8 +110,6 @@ const ChatScreen = ({ route }) => {
         }
       }
       if (messages.length === 7) {
-        console.log('start 102', messages.length)
-        console.log('start 102', newMessages[0].text)
         setEmotion(newMessages[0].text)
       }
       setMessages((prevMessages) =>
@@ -129,7 +127,6 @@ const ChatScreen = ({ route }) => {
     fetch(URL)
       .then((response) => response.json())
       .then((json) => {
-        console.log('response', json)
         appendBotMessage(json)
       })
       .catch((err) => {
@@ -150,7 +147,8 @@ const ChatScreen = ({ route }) => {
             messages={messages}
             onSend={(messages) => onSend(messages)}
             user={{
-              _id: username
+              _id: 12022,
+              name: 'Steven',
             }}
           />
         </KeyboardAvoidingView>
