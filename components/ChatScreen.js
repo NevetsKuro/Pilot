@@ -23,17 +23,17 @@ const ChatScreen = ({ route }) => {
 
   const initialMessages = [
     {
-      _id: 1,
+      _id: 0,
       text: 'This is a system message',
       createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
       system: true
-    },
-    {
-      _id: 2,
-      text: 'Hello',
-      createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-      user: false
     }
+    // {
+    //   _id: 2,
+    //   text: 'Hello, User',
+    //   createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+    //   user: false
+    // }
   ]
   const [messages, setMessages] = React.useState([])
 
@@ -41,20 +41,41 @@ const ChatScreen = ({ route }) => {
     setMessages(initialMessages.reverse())
   }, [])
 
-  const onSend = (newMessages = []) => {
-    console.log(newMessages)
-    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
-    setTimeout(() => {
+  const appendBotMessage = (data) => {
+    const replyMessage = data?.choices?.[0]?.message?.content || ''
+    if (replyMessage) {
       setMessages((prevMessages) =>
         GiftedChat.append(prevMessages, [
           {
-            text: 'Hello!',
+            _id: prevMessages.length,
+            text: replyMessage,
             createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
             system: false
           }
         ])
       )
-    }, 2000)
+    }
+  }
+  const onSend = (newMessages = []) => {
+    console.log(messages)
+    if (!newMessages[0]._id) {
+      newMessages[0]._id = newMessages.length
+    }
+    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
+    fetch(
+      `https://e0f4-14-143-59-170.in.ngrok.io/new_message?
+      user_id=${19021}&age_category=${'old'}&emotion=${'GOOD'}&content=${
+        newMessages[0].text
+      }`
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        console.log('response', json)
+        appendBotMessage(json)
+      })
+      .catch((err) => {
+        console.error('error', err)
+      })
   }
 
   return (
@@ -72,6 +93,7 @@ const ChatScreen = ({ route }) => {
             user={{
               _id: username
             }}
+
             // renderBubble={renderBubble}
             // renderSystemMessage={renderSystemMessage}
             // renderMessage={renderMessage}

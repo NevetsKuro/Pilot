@@ -11,7 +11,7 @@ const HomeScreen = ({ navigation }) => {
       //If not then send for Authentication
       //else send to Home Screen
       navigation.navigate('ChatScreen', { username: 'user' })
-    }, 2000)
+    }, 1000)
   }, [])
 
   return (
