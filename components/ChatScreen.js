@@ -21,6 +21,42 @@ import {
 const ChatScreen = ({ route }) => {
   const { username } = route.params
 
+  const [indexMsg, setIndex] = React.useState(0)
+
+  const generateId = (randomNumber = 8) => {
+    return (
+      Math.floor(Math.random() * 10000000 * randomNumber) + new Date().getTime()
+    )
+  }
+
+  const BotInitialMessages = [
+    {
+      _id: generateId(1),
+      text: "What's your name ?",
+      createdAt: new Date(),
+      system: false
+      //   user: { _id: 'user' }
+    },
+    {
+      _id: generateId(2),
+      text: "What's your age ?",
+      createdAt: new Date(),
+      system: false
+    },
+    {
+      _id: generateId(3),
+      text: "What's your mood today ?",
+      createdAt: new Date(),
+      system: false
+    },
+    {
+      _id: generateId(4),
+      text: 'What do you want to talk about ?',
+      createdAt: new Date(),
+      system: false
+    }
+  ]
+
   const initialMessages = [
     {
       _id: 0,
@@ -58,12 +94,18 @@ const ChatScreen = ({ route }) => {
   }
   const onSend = (newMessages = []) => {
     console.log(messages)
-    if (!newMessages[0]._id) {
-      newMessages[0]._id = newMessages.length
+    // if (!newMessages[0]._id) {
+    //   newMessages[0]._id = newMessages.length
+    // }
+    if(messages.length < 7) {
+      setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
+      setMessages((prevMessages) => GiftedChat.append(prevMessages, BotInitialMessages[indexMsg]))
+      setIndex((prev)=> indexMsg+1)
+      return
     }
     setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
     fetch(
-      `https://e0f4-14-143-59-170.in.ngrok.io/new_message?
+      `https://29ae-14-143-59-170.in.ngrok.io/new_message?
       user_id=${19021}&age_category=${'old'}&emotion=${'GOOD'}&content=${
         newMessages[0].text
       }`
@@ -74,7 +116,7 @@ const ChatScreen = ({ route }) => {
         appendBotMessage(json)
       })
       .catch((err) => {
-        console.error('error', err)
+        console.error('error', err.json())
       })
   }
 
