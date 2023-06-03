@@ -1,10 +1,5 @@
 import * as React from 'react'
-import {
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-  Text
-} from 'react-native'
+import { StyleSheet, View, KeyboardAvoidingView, Text } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot'
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome'
@@ -13,7 +8,22 @@ import { GiftedChat } from 'react-native-gifted-chat'
 const ChatScreen = ({ route }) => {
   const { username } = route.params
 
+  const ENUM = {
+    age_category: {
+      young: 'YOUNG',
+      mature: 'MATURE',
+      older: 'OLDER'
+    },
+    emotion: {
+      good: 'GOOD',
+      bad: 'BAD',
+      depressed: 'DEPRESSED'
+    }
+  }
+
   const [indexMsg, setIndex] = React.useState(0)
+  const [age, setAGE] = React.useState(null)
+  const [emotion, setEmotion] = React.useState(null)
 
   const generateId = (randomNumber = 8) => {
     return (
@@ -80,19 +90,36 @@ const ChatScreen = ({ route }) => {
   }
   const onSend = (newMessages = []) => {
     console.log(messages)
-    if(messages.length < 7) {
-      setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
-      setMessages((prevMessages) => GiftedChat.append(prevMessages, BotInitialMessages[indexMsg]))
-      setIndex((prev)=> indexMsg+1)
+    if (messages.length < 7) {
+      if (messages.length - 1 === 3) {
+        const ageNumber = parseInt(newMessages[0].text)
+        if (ageNumber > 0 && ageNumber < 18) {
+          setAGE(ENUM.age_category.young)
+        }
+        if (ageNumber > 17 && ageNumber < 56) {
+          setAGE(ENUM.age_category.mature)
+        }
+        if (ageNumber > 55) {
+          setAGE(ENUM.age_category.older)
+        }
+      }
+      if (messages.length - 1 === 5) {
+        setEmotion(newMessages[0].text)
+      }
+      setMessages((prevMessages) =>
+        GiftedChat.append(prevMessages, newMessages)
+      )
+      setMessages((prevMessages) =>
+        GiftedChat.append(prevMessages, BotInitialMessages[indexMsg])
+      )
+      setIndex((prev) => indexMsg + 1)
       return
     }
     setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
-    fetch(
-      `https://29ae-14-143-59-170.in.ngrok.io/new_message?
-      user_id=${19021}&age_category=${'old'}&emotion=${'GOOD'}&content=${
-        newMessages[0].text
-      }`
-    )
+    const URL = `https://29ae-14-143-59-170.in.ngrok.io/new_message?
+    user_id=19021&age_category=${age}&emotion=${emotion}&content=${newMessages[0].text}`
+    console.log(URL)
+    fetch(URL)
       .then((response) => response.json())
       .then((json) => {
         console.log('response', json)

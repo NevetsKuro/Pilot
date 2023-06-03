@@ -16,10 +16,14 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.mainBody}>
-      <Image
-        source={require('../assets/bot-animation.gif')}
-        style={{ width: '100%', resizeMode: 'contain', marginLeft: 'auto' }}
-      />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ChatScreen', { username: 'user' })}
+      >
+        <Image
+          source={require('../assets/bot-animation.gif')}
+          style={{ width: '100%', resizeMode: 'contain', marginLeft: 'auto' }}
+        />
+      </TouchableOpacity>
       <ActivityIndicator
         animating={animating}
         color="#FFFFFF"
