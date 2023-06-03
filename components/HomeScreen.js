@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, View, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
 
 const HomeScreen = ({ navigation }) => {
   const [animating, setAnimating] = React.useState(true)

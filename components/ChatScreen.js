@@ -24,6 +24,7 @@ const ChatScreen = ({ route }) => {
   const [indexMsg, setIndex] = React.useState(0)
   const [age, setAGE] = React.useState(null)
   const [emotion, setEmotion] = React.useState(null)
+  const [userId, setUserId] = React.useState('');
 
   const generateId = (randomNumber = 8) => {
     return (
@@ -63,7 +64,7 @@ const ChatScreen = ({ route }) => {
     {
       _id: 0,
       text: 'This is a system message',
-      createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+      createdAt: new Date(),
       system: true
     }
   ]
@@ -71,6 +72,8 @@ const ChatScreen = ({ route }) => {
 
   React.useEffect(() => {
     setMessages(initialMessages.reverse())
+    const randomNumber = Math.ceil(Math.random()*10000000);
+    setUserId(randomNumber);
   }, [])
 
   const appendBotMessage = (data) => {
@@ -81,7 +84,7 @@ const ChatScreen = ({ route }) => {
           {
             _id: prevMessages.length,
             text: replyMessage,
-            createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+            createdAt: new Date(),
             system: false
           }
         ])
@@ -89,9 +92,12 @@ const ChatScreen = ({ route }) => {
     }
   }
   const onSend = (newMessages = []) => {
-    console.log(messages)
-    if (messages.length < 7) {
-      if (messages.length - 1 === 3) {
+    // console.log(messages)
+    if (messages.length < 9) {
+      console.log('start 1', messages.length)
+      if (messages.length === 5) {
+        console.log('start 101', messages.length)
+        console.log('start 101', newMessages[0].text)
         const ageNumber = parseInt(newMessages[0].text)
         if (ageNumber > 0 && ageNumber < 18) {
           setAGE(ENUM.age_category.young)
@@ -103,7 +109,9 @@ const ChatScreen = ({ route }) => {
           setAGE(ENUM.age_category.older)
         }
       }
-      if (messages.length - 1 === 5) {
+      if (messages.length === 7) {
+        console.log('start 102', messages.length)
+        console.log('start 102', newMessages[0].text)
         setEmotion(newMessages[0].text)
       }
       setMessages((prevMessages) =>
@@ -116,8 +124,7 @@ const ChatScreen = ({ route }) => {
       return
     }
     setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
-    const URL = `https://29ae-14-143-59-170.in.ngrok.io/new_message?
-    user_id=19021&age_category=${age}&emotion=${emotion}&content=${newMessages[0].text}`
+    const URL = `https://cec1-14-143-59-170.in.ngrok.io/new_message?user_id=${userId}&age_category=${age}&emotion=${emotion}&content=${newMessages[0].text}`
     console.log(URL)
     fetch(URL)
       .then((response) => response.json())
@@ -134,7 +141,7 @@ const ChatScreen = ({ route }) => {
     <View style={styles.mainBody}>
       <View style={styles.header}>
         <FontAwesomeIcon icon={faRobot} style={styles.botIcon} size={20} />
-        <Text style={styles.headerText}>Buddy - The AI chatbot!</Text>
+        <Text style={styles.headerText}>Buddy - Your companion!</Text>
         <FontAwesomeIcon icon={faHome} style={styles.homeIcon} size={20} />
       </View>
       <View style={styles.chatSection}>
