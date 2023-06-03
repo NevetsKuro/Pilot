@@ -3,20 +3,12 @@ import {
   StyleSheet,
   View,
   KeyboardAvoidingView,
-  TextInput,
   Text
 } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRobot } from '@fortawesome/free-solid-svg-icons/faRobot'
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome'
 import { GiftedChat } from 'react-native-gifted-chat'
-import {
-  renderBubble,
-  renderCustomView,
-  renderMessage,
-  renderMessageText,
-  renderSystemMessage
-} from './MessageContainer'
 
 const ChatScreen = ({ route }) => {
   const { username } = route.params
@@ -64,12 +56,6 @@ const ChatScreen = ({ route }) => {
       createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
       system: true
     }
-    // {
-    //   _id: 2,
-    //   text: 'Hello, User',
-    //   createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-    //   user: false
-    // }
   ]
   const [messages, setMessages] = React.useState([])
 
@@ -94,9 +80,6 @@ const ChatScreen = ({ route }) => {
   }
   const onSend = (newMessages = []) => {
     console.log(messages)
-    // if (!newMessages[0]._id) {
-    //   newMessages[0]._id = newMessages.length
-    // }
     if(messages.length < 7) {
       setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages))
       setMessages((prevMessages) => GiftedChat.append(prevMessages, BotInitialMessages[indexMsg]))
@@ -135,28 +118,9 @@ const ChatScreen = ({ route }) => {
             user={{
               _id: username
             }}
-
-            // renderBubble={renderBubble}
-            // renderSystemMessage={renderSystemMessage}
-            // renderMessage={renderMessage}
-            // renderMessageText={renderMessageText}
           />
         </KeyboardAvoidingView>
       </View>
-      {/* <View style={styles.inputBar}>
-          <TextInput
-            style={styles.inputStyle}
-            onChangeText={(message) => setMessage(message)}
-            placeholder="Enter Message"
-            placeholderTextColor="#8b9cb5"
-            autoCapitalize="none"
-            keyboardType="ascii-capable"
-            returnKeyType="next"
-            onSubmitEditing={() => alert('Entered!')}
-            underlineColorAndroid="#f000"
-            blurOnSubmit={false}
-          ></TextInput>
-        </View> */}
     </View>
   )
 }
